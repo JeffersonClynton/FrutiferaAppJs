@@ -1,40 +1,91 @@
-// Conjunto dados para montar dinamicamente as estruras dos cards
+// A palavra-chave `import` permite reutilizar código de outro arquivo.
+// Aqui estou importando o array padrão exportado de informacao.js.
 import informacoesCards from './dataset/informacao.js';
 
-// Essa função recebe um objeto "informacoesCard"
-// e monta a estrutura HTML de um card usando template string.
+
+// Declaro uma função anônima usando Arrow Function (=>), e atribuo a uma variável.
+//
+// Sintaticamente:
+// (parametro) => { bloco }
+//
+// Semanticamente:
+// Essa função recebe um objeto contendo dados da fruta, e retorna uma string HTML estruturada como um card Bootstrap.
 let createInformacoesCard = (informacoesCard) => {
-  let card = `<div class="col">
+
+  // Utilizo Template String (crase), que permite interpolação de variáveis com ${variavel}
+  let card = `
+        <div class="col">
           <div class="card h-100">
-            <img src="${informacoesCard.url}" class="card-img-top" style="height: 220px; object-fit: cover;" alt="${informacoesCard.titulo}">
-            <div class="card-body  d-flex flex-column">
-              <h5 class="card-title">${informacoesCard.titulo}</h5>
-              <p class="card-text">${informacoesCard.subtitulo}</p>
-              <a href="#" class="btn btn-primary">Consultar</a>
+
+            <!-- Imagem dinâmica -->
+            <img src="${informacoesCard.url}" 
+                 class="card-img-top" 
+                 style="height: 220px; object-fit: cover;" 
+                 alt="${informacoesCard.titulo}">
+
+            <div class="card-body d-flex flex-column">
+
+              <!-- Título dinâmico -->
+              <h5 class="card-title">
+                ${informacoesCard.titulo}
+              </h5>
+
+              <!-- Subtítulo dinâmico -->
+              <p class="card-text">
+                ${informacoesCard.subtitulo}
+              </p>
+
+              <!-- Botão padrão -->
+              <a href="#" class="btn btn-primary">
+                Consultar
+              </a>
+
             </div>
           </div>
-        </div>`;
+        </div>
+  `;
 
+  // A palavra-chave `return` devolve a string gerada, para quem chamou a função.
   return card;
 };
 
-// Essa função recebe o HTML do card já criado
+
+//FUNÇÃO: INSERIR CARD NO DOM
+
+// Declaro outra Arrow Function. Essa função recebe como argumento uma string HTML pronta.
 let addInformacaoCard = (card) => {
-  // Pega o elemento onde os cards serão inseridos
+
+  // `document.getElementById` é um método do DOM, que busca um elemento pelo id.
   let informacoesCardsRow = document.getElementById('informacoesCardsRow');
 
-  // Adiciona no final, sem apagar o que já existe
+  // `insertAdjacentHTML` insere HTML sem substituir o conteúdo existente. O parâmetro 'beforeend' indica que será inserido no final.
   informacoesCardsRow.insertAdjacentHTML('beforeend', card);
 };
 
-// Essa função percorre o array importado
-// e cria todos os cards dinamicamente.
+
+//FUNÇÃO: CARREGAR TODOS OS CARDS
+
+// Essa função controla o fluxo principal de geração dos cards.
 let loadInformacoesCards = () => {
+
+  // Utilizo `for...of` para percorrer arrays.
+  // Sintática:
+  // for (variavel of array)
+  // Semântica:
+  // Para cada objeto dentro do array informacoesCards, executa o bloco abaixo.
   for (let informacoesCard of informacoesCards) {
+
+    // Chamo a função que cria o card
     let card = createInformacoesCard(informacoesCard);
+
+    // Depois adiciono esse card ao DOM
     addInformacaoCard(card);
   }
 };
 
-// loadInformacoesCards();
+
+//EVENTO DE CARREGAMENTO
+
+// `window.onload` é um evento do navegador. Ele é disparado quando toda a página termina de carregar.
+// Aqui estou atribuindo a função loadInformacoesCards
 window.onload = loadInformacoesCards;
